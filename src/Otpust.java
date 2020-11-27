@@ -10,7 +10,7 @@ public class Otpust extends Thread {
     public void run() {
         try {
             while (true) {
-                System.out.println("odeljenje broj "+(count+1));
+                System.out.println("odeljenje broj "+(count+10));
                 ClientHandler.count[count]--;
                 System.out.println("Soba "+ClientHandler.odeljenja[count]+" sada");
                 System.out.println("sada ima "+ClientHandler.count[count]);
