@@ -21,23 +21,19 @@ public class Client extends JFrame {
         }
     }
 
-   // public ServerHandler serverHandler= new ServerHandler(socket);
 
     BufferedReader in= new BufferedReader(new InputStreamReader(socket.getInputStream()));
     PrintWriter out= new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-    //Socket socket;
 
 
 
 
     Client() throws IOException {
 
-    //ClientHandler c= new ClientHandler(socket);
-    //ServerHandler ss= new ServerHandler(socket);
 
 }
 
-    public String odeljenja[]= {"Neurologija","Traumatologija","Oftamlogiuja","Kovid"};
+    public static String odeljenja[]= {"Neurologija","Traumatologija","Oftamlogiuja","Kovid"};
 
     JLabel ime = new JLabel("Ime:");
     JTextField unosIme = new JTextField(15);
@@ -55,8 +51,6 @@ public class Client extends JFrame {
     JLabel server= new JLabel();
 
     public static void main(String[] args) throws IOException{
-        //ServerHandler sh=new ServerHandler(socket);
-        //SwingUtilities.invokeAndWait(new ServerHandler(socket));
        Client klijent= new Client();
        klijent.Prozor();
 
@@ -142,46 +136,13 @@ public class Client extends JFrame {
                     }
 
 
+
+
                 }
         });
         setVisible(true);
 
 
     }
-       /* @Override
-        public void actionPerformed (ActionEvent e){
-            if (e.getSource() == dugme) {
-            String ime=unosIme.getText();
-            String prezime= unosPrezime.getText();
-            String Br_knjizice= unosbrknjizice.getText();
-
-
-                String soba = (String) odeljenje.getItemAt(odeljenje.getSelectedIndex());
-                out.println(soba);
-
-            if (odeljenje.getItemAt(odeljenje.getSelectedIndex()) =="Traumatologija") {
-                tra++;
-                System.out.println(tra);
-                out.println(tra);
-            }else if (odeljenje.getItemAt(odeljenje.getSelectedIndex()) =="Neurologija") {
-                neu++;
-                System.out.println(neu);
-                out.println(neu);
-            }else if (odeljenje.getItemAt(odeljenje.getSelectedIndex()) =="Kovid") {
-                kov++;
-                System.out.println(kov);
-                out.println(kov);
-            }else if (odeljenje.getItemAt(odeljenje.getSelectedIndex()) =="Oftamologija") {
-                oft++;
-                System.out.println(oft);
-                out.println(oft);
-            }
-
-
-                System.out.println(ime+prezime+Br_knjizice);
-        }
-
-            }
-        }*/
 
 }

@@ -1,8 +1,6 @@
 public class Otpust extends Thread {
-    private int count;
     private long min=10000,max=20000;
-    public Otpust(int count) {
-        this.count=count;
+    public Otpust() {
         start();
     }
 
@@ -10,15 +8,17 @@ public class Otpust extends Thread {
     public void run() {
         try {
             while (true) {
-                System.out.println("odeljenje broj "+(count+1));
+                int count = (int) ((Math.random() * 3));;
+                System.out.println("Odeljenje broj "+(count+1));
                 ClientHandler.count[count]--;
-                System.out.println("Soba "+ClientHandler.odeljenja[count]+" sada");
-                System.out.println("sada ima "+ClientHandler.count[count]);
+                System.out.println("Soba "+Client.odeljenja[count]+" se sada umanjuje za jednog pacijenta sada");
+                System.out.println("Soba "+Client.odeljenja[count]+" sada ima "+ClientHandler.count[count]+" pacijenta");
                 sleep((long) Math.random() * (max - min + 1) + min);
+                System.out.println();
             }
-            } catch(InterruptedException e){
-                e.printStackTrace();
-            }
+        } catch(InterruptedException e){
+            e.printStackTrace();
+        }
 
     }
 }
