@@ -9,7 +9,7 @@ import java.net.Socket;
 
 public class Client extends JFrame {
     private static final String SERVER_IP="127.0.0.1";
-    private static final  int SERVER_PORT=100;
+    private static final  int SERVER_PORT=8005;
     public static Socket    socket;
 
 
@@ -28,10 +28,7 @@ public class Client extends JFrame {
 
 
 
-    Client() throws IOException {
-
-
-}
+    Client() throws IOException {}
 
     public static String odeljenja[]= {"Neurologija","Traumatologija","Oftamlogiuja","Kovid"};
 
@@ -48,11 +45,13 @@ public class Client extends JFrame {
     JButton dugme= new JButton("Posalji");
     JLabel soba= new JLabel("Izaberite odeljenje:");
     JComboBox odeljenje= new JComboBox(odeljenja);
-    JLabel server= new JLabel();
+    JTextArea server= new JTextArea();
+
+
 
     public static void main(String[] args) throws IOException{
-       Client klijent= new Client();
-       klijent.Prozor();
+        Client klijent= new Client();
+        klijent.Prozor();
 
 
     }
@@ -61,7 +60,7 @@ public class Client extends JFrame {
         panel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         setTitle("Bolnica");
-        setSize(500, 500);
+        setSize(700, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
@@ -114,7 +113,9 @@ public class Client extends JFrame {
 
         c.gridx = 0;
         c.gridy = 7;
-        c.gridwidth=2;
+        c.gridwidth=3;
+        server.setPreferredSize(new Dimension(350,20));
+        server.setEditable(false);
         panel.add(server, c);
 
 
@@ -123,26 +124,33 @@ public class Client extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == dugme) {
-                    String soba = (String) odeljenje.getItemAt(odeljenje.getSelectedIndex());
-                    out.println(soba);
+                    String soba = (String) odeljenje.getItemAt(odeljenje.getSelectedIndex()); // uzimanje naziva sobe u koju se smesta pacijent
+                    out.println(soba);          // slanje naziva sobe Serveru
 
-                }
-
-                    try {
-                       String res= in.readLine();
-                        server.setText(res);
-                    } catch (IOException ioException) {
-                        ioException.printStackTrace();
-                    }
-
-
+                    unosIme.setText("");        //"Čišćenje teks polja za unos novog pacijenta"
+                    unosPrezime.setText("");
+                    unosbrknjizice.setText("");
+                    group.clearSelection();
 
 
                 }
+
+
+                try {
+                    String res= in.readLine();  //prijem poruke od servera
+                    server.setText(res);       //ispis poruke u textarea
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+
+
+
+
+            }
         });
         setVisible(true);
-
-
     }
+
+
 
 }
