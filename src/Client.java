@@ -3,16 +3,13 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.net.InetAddress;
 import java.net.Socket;
+import java.util.Vector;
 
 public class Client extends JFrame {
     private static final String SERVER_IP="127.0.0.1";
-    private static final  int SERVER_PORT=100;
+    private static final  int SERVER_PORT=8005;
     public static Socket    socket;
-
-
     static {
         try {
             socket = new Socket(SERVER_IP, SERVER_PORT);
@@ -21,23 +18,14 @@ public class Client extends JFrame {
         }
     }
 
-   // public ServerHandler serverHandler= new ServerHandler(socket);
 
     BufferedReader in= new BufferedReader(new InputStreamReader(socket.getInputStream()));
     PrintWriter out= new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
-    //Socket socket;
 
 
 
 
-    Client() throws IOException {
-
-    //ClientHandler c= new ClientHandler(socket);
-    //ServerHandler ss= new ServerHandler(socket);
-
-}
-
-    public String odeljenja[]= {"Neurologija","Traumatologija","Oftamlogiuja","Kovid"};
+    Client() throws IOException {}
 
     JLabel ime = new JLabel("Ime:");
     JTextField unosIme = new JTextField(15);
@@ -51,23 +39,23 @@ public class Client extends JFrame {
     ButtonGroup group= new ButtonGroup();
     JButton dugme= new JButton("Posalji");
     JLabel soba= new JLabel("Izaberite odeljenje:");
-    JComboBox odeljenje= new JComboBox(odeljenja);
-    JLabel server= new JLabel();
+    JComboBox odeljenje= new JComboBox(ClientHandler.odeljenja);
+    JTextArea server= new JTextArea();
+    JButton proveraStanja= new JButton("Stanje na odeljenjima");
+    String newNum0,newNum1,newNum2,newNum3;
 
     public static void main(String[] args) throws IOException{
-        //ServerHandler sh=new ServerHandler(socket);
-        //SwingUtilities.invokeAndWait(new ServerHandler(socket));
-       Client klijent= new Client();
-       klijent.Prozor();
+        Client klijent= new Client();
+        klijent.Prozor();
 
 
     }
-    public  void Prozor() throws IOException {
+    public  void Prozor(){
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         setTitle("Bolnica");
-        setSize(500, 500);
+        setSize(700, 500);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 
@@ -120,68 +108,63 @@ public class Client extends JFrame {
 
         c.gridx = 0;
         c.gridy = 7;
-        c.gridwidth=2;
+        c.gridwidth=3;
+        server.setPreferredSize(new Dimension(350,40));
+        server.setEditable(false);
         panel.add(server, c);
+
+        c.gridx=0;
+        c.gridy=8;
+        c.gridwidth=1;
+        panel.add(proveraStanja,c);
 
 
         add(panel);
+
+
         dugme.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == dugme) {
-                    String soba = (String) odeljenje.getItemAt(odeljenje.getSelectedIndex());
-                    out.println(soba);
+                    String sobastr = (String) odeljenje.getItemAt(odeljenje.getSelectedIndex()); // uzimanje naziva sobe u koju se smesta pacijent
+                    out.println(sobastr);          // slanje naziva sobe Serveru
+
+                    unosIme.setText("");        //"Čišćenje teks polja za unos novog pacijenta"
+                    unosPrezime.setText("");
+                    unosbrknjizice.setText("");
+                    group.clearSelection();
 
                 }
 
+                try {
+                    String res1= in.readLine();//prijem poruke od servera
+                    String res2= in.readLine();
+                    server.setText(res1+"\n"+res2);//ispis poruke u textarea
+
+
+
+                } catch (IOException ioException) {
+                    ioException.printStackTrace();
+                }
+            }
+        });
+
+        proveraStanja.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (e.getSource()==proveraStanja) {
+                    out.println("Osvezi");
                     try {
-                       String res= in.readLine();
-                        server.setText(res);
+                        server.setText(in.readLine());
                     } catch (IOException ioException) {
                         ioException.printStackTrace();
                     }
-
-
                 }
+
+
+            }
         });
         setVisible(true);
-
-
     }
-       /* @Override
-        public void actionPerformed (ActionEvent e){
-            if (e.getSource() == dugme) {
-            String ime=unosIme.getText();
-            String prezime= unosPrezime.getText();
-            String Br_knjizice= unosbrknjizice.getText();
-
-
-                String soba = (String) odeljenje.getItemAt(odeljenje.getSelectedIndex());
-                out.println(soba);
-
-            if (odeljenje.getItemAt(odeljenje.getSelectedIndex()) =="Traumatologija") {
-                tra++;
-                System.out.println(tra);
-                out.println(tra);
-            }else if (odeljenje.getItemAt(odeljenje.getSelectedIndex()) =="Neurologija") {
-                neu++;
-                System.out.println(neu);
-                out.println(neu);
-            }else if (odeljenje.getItemAt(odeljenje.getSelectedIndex()) =="Kovid") {
-                kov++;
-                System.out.println(kov);
-                out.println(kov);
-            }else if (odeljenje.getItemAt(odeljenje.getSelectedIndex()) =="Oftamologija") {
-                oft++;
-                System.out.println(oft);
-                out.println(oft);
-            }
-
-
-                System.out.println(ime+prezime+Br_knjizice);
-        }
-
-            }
-        }*/
 
 }
