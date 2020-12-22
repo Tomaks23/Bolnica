@@ -4,12 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.Socket;
-import java.util.Vector;
 
 public class Client extends JFrame {
-    private static final String SERVER_IP="127.0.0.1";
-    private static final  int SERVER_PORT=8005;
-    public static Socket    socket;
+    private static final String SERVER_IP = "127.0.0.1";
+    private static final int SERVER_PORT = 8005;
+    public static Socket socket;
+
     static {
         try {
             socket = new Socket(SERVER_IP, SERVER_PORT);
@@ -19,13 +19,12 @@ public class Client extends JFrame {
     }
 
 
-    BufferedReader in= new BufferedReader(new InputStreamReader(socket.getInputStream()));
-    PrintWriter out= new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
+    BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+    PrintWriter out = new PrintWriter(new OutputStreamWriter(socket.getOutputStream()), true);
 
 
-
-
-    Client() throws IOException {}
+    Client() throws IOException {
+    }
 
     JLabel ime = new JLabel("Ime:");
     JTextField unosIme = new JTextField(15);
@@ -33,24 +32,22 @@ public class Client extends JFrame {
     JTextField unosPrezime = new JTextField(15);
     JLabel brknjizice = new JLabel("Broj Knjizice: ");
     JTextField unosbrknjizice = new JTextField(11);
-    JLabel svestan= new JLabel("Svestan: ");
-    JRadioButton da= new JRadioButton("Da");
-    JRadioButton ne= new JRadioButton("Ne");
-    ButtonGroup group= new ButtonGroup();
-    JButton dugme= new JButton("Posalji");
-    JLabel soba= new JLabel("Izaberite odeljenje:");
-    JComboBox odeljenje= new JComboBox(ClientHandler.odeljenja);
-    JTextArea server= new JTextArea();
-    JButton proveraStanja= new JButton("Stanje na odeljenjima");
-    String newNum0,newNum1,newNum2,newNum3;
+    JLabel svestan = new JLabel("Svestan: ");
+    JRadioButton da = new JRadioButton("Da");
+    JRadioButton ne = new JRadioButton("Ne");
+    ButtonGroup group = new ButtonGroup();
+    JButton dugme = new JButton("Posalji");
+    JLabel soba = new JLabel("Izaberite odeljenje:");
+    JComboBox odeljenje = new JComboBox(ClientHandler.odeljenja);
+    JTextArea server = new JTextArea();
+    JButton proveraStanja = new JButton("Stanje na odeljenjima");
 
-    public static void main(String[] args) throws IOException{
-        Client klijent= new Client();
-        klijent.Prozor();
-
+    public static void main(String[] args) throws IOException {
+        new Client().Prozor();
 
     }
-    public  void Prozor(){
+
+    public void Prozor() {
         JPanel panel = new JPanel();
         panel.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -108,15 +105,15 @@ public class Client extends JFrame {
 
         c.gridx = 0;
         c.gridy = 7;
-        c.gridwidth=3;
-        server.setPreferredSize(new Dimension(350,40));
+        c.gridwidth = 3;
+        server.setPreferredSize(new Dimension(350, 40));
         server.setEditable(false);
         panel.add(server, c);
 
-        c.gridx=0;
-        c.gridy=8;
-        c.gridwidth=1;
-        panel.add(proveraStanja,c);
+        c.gridx = 0;
+        c.gridy = 8;
+        c.gridwidth = 1;
+        panel.add(proveraStanja, c);
 
 
         add(panel);
@@ -126,10 +123,10 @@ public class Client extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == dugme) {
-                    String sobastr = (String) odeljenje.getItemAt(odeljenje.getSelectedIndex()); // uzimanje naziva sobe u koju se smesta pacijent
-                    out.println(sobastr);          // slanje naziva sobe Serveru
+                    String sobastr = (String) odeljenje.getItemAt(odeljenje.getSelectedIndex());
+                    out.println(sobastr);
 
-                    unosIme.setText("");        //"Čišćenje teks polja za unos novog pacijenta"
+                    unosIme.setText("");
                     unosPrezime.setText("");
                     unosbrknjizice.setText("");
                     group.clearSelection();
@@ -137,10 +134,9 @@ public class Client extends JFrame {
                 }
 
                 try {
-                    String res1= in.readLine();//prijem poruke od servera
-                    String res2= in.readLine();
-                    server.setText(res1+"\n"+res2);//ispis poruke u textarea
-
+                    String res1 = in.readLine();
+                    String res2 = in.readLine();
+                    server.setText(res1 + "\n" + res2);
 
 
                 } catch (IOException ioException) {
@@ -152,7 +148,7 @@ public class Client extends JFrame {
         proveraStanja.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (e.getSource()==proveraStanja) {
+                if (e.getSource() == proveraStanja) {
                     out.println("Osvezi");
                     try {
                         server.setText(in.readLine());

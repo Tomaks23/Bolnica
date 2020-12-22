@@ -36,7 +36,7 @@ public class ClientHandler extends Thread {
             while (true) {
 
 
-                String odgovor = in.readLine();      /*Prjem naziva sobe u kojoj je smesten novi pacijent */
+                String odgovor = in.readLine();
                 int index = 0;
                 while (index < odeljenja.length) {
                     if (odgovor.equals(odeljenja[index])) {
@@ -44,13 +44,13 @@ public class ClientHandler extends Thread {
                     }
                     index++;
                 }
-                if(index<odeljenja.length) {
+                if (index < odeljenja.length) {
 
                     String text = "";
                     if (count[index].get() < 10) {
-                        int nunOfPatients = count[index].incrementAndGet();
+                        int brojPacijenata = count[index].incrementAndGet();
                         text += "Pacijent je smesten! \n";
-                        System.out.println("Pacijent je smesten na " + odgovor + " ukupno pacijentata: " + nunOfPatients);
+                        System.out.println("Pacijent je smesten na " + odgovor + " ukupno pacijentata: " + brojPacijenata);
 
                     } else {
                         text += "Soba je vec puna! \n";
@@ -59,7 +59,7 @@ public class ClientHandler extends Thread {
 
                     text += listaParova();
                     out.println(text);
-                }else {
+                } else {
 
                     out.println(listaParova());
                 }
